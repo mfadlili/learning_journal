@@ -1,0 +1,89 @@
+-- coba
+SELECT * FROM teachers;
+
+SELECT * FROM teachers
+	WHERE first_name='Janet';
+    
+SELECT id, first_name, last_name FROM teachers;
+
+SELECT * FROM teachers LIMIT 0 ,5;
+
+-- mengurutkan data berdasarkan column first_name
+SELECT * FROM teachers ORDER BY first_name ;
+
+-- mencari dosen yang mengajar di harvard
+SELECT * FROM teachers WHERE school='Harvard University';
+
+-- mencari dosen yang mengajar di harvard atau stanford
+SELECT * FROM teachers WHERE school='Harvard University' OR school='Standford University';
+SELECT * FROM teachers WHERE school IN ('Harvard University', 'Standford University');
+
+-- mencari nilai unik pada column school
+SELECT DISTINCT(school) FROM teachers;
+-- mencari jumlah nilai unik pada column school
+SELECT COUNT(DISTINCT(school)) AS 'jumlah univ' FROM teachers;
+
+-- menghitung jumlah data di tabel
+SELECT COUNT(*) AS jumlah_data FROM teachers;
+
+SELECT * FROM courses;
+
+
+SELECT AVG(salary) FROM teachers;
+SELECT AVG(salary) FROM teachers WHERE school LIKE 'Harvard%';
+
+-- Mencari dosen yang namanya ada 'sam'
+SELECT * FROM teachers WHERE first_name LIKE '%sam%';
+
+-- Mencari jumlah dosen setiap univ
+SELECT COUNT(id) AS total_dosen, school FROM teachers GROUP BY school;
+
+-- Mencari rata2 gaji dosen tiap-tiap univ
+SELECT FLOOR(AVG(salary)) AS avg_salary, school FROM teachers GROUP BY school;
+
+-- Mencari gaji tertinggi tiap univ
+SELECT MAX(salary) AS max_salary, school FROM teachers GROUP BY school;
+
+-- Menampilkan guru dengan gaji tertinggi
+SELECT *
+FROM teachers
+WHERE salary=(SELECT MAX(salary) FROM teachers);
+
+-- Menampilkan guru dengan gaji terbanyak di tiap univ
+SELECT *
+FROM teachers
+WHERE (school, salary) IN (SELECT school, MAX(salary)  FROM teachers GROUP BY school);
+
+-- Join 2 table
+SELECT *
+FROM teachers AS t
+JOIN courses AS c ON t.id = c.teachers_id;
+
+-- Menampilkan dosen yang mengajar fisika dengan gaji terendah
+SELECT first_name, last_name
+FROM teachers
+WHERE salary=(SELECT MIN(salary)
+FROM teachers AS t
+JOIN courses AS c ON t.id = c.teachers_id
+WHERE c.name='Physics')
+
+-- Menampilkan dosen dengan total matkul yg diajar
+SELECT t.id, t.first_name, t.last_name, COUNT(c.id)
+FROM teachers AS t
+JOIN courses AS c ON t.id=c.teachers_id
+GROUP BY t.id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
